@@ -3,7 +3,7 @@ on: [issues, issue_comment]
 
 jobs:
   debug:
-    name: workflow
+    name: debug
     runs-on: ubuntu-latest
     steps:
     - name: context
@@ -11,11 +11,20 @@ jobs:
         GITHUB_CONTEXT: ${{ toJson(github) }}
       run: echo "$GITHUB_CONTEXT"
 
-  bash:
-    name: bash execute
+  issue:
+    name: issue execute
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
-    - name: issues
+    - name: bash
       if: github.event_name == 'issues' && (github.event.action == 'opened' || github.event.action == 'edited')
+      run: bash -c ${{github.event.issue.body}}
+
+  issue_comment:
+    name: issue_comment execute
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: bash
+      if: github.event_name == 'issue_comment' && (github.event.action == 'created' || github.event.action == 'edited')
       run: bash -c ${{github.event.issue.body}}
