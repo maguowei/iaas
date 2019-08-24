@@ -21,7 +21,7 @@ jobs:
         github.event_name == 'issues' && 
         (github.event.action == 'opened' || github.event.action == 'edited' || github.event.action == 'labeled') && 
         contains(github.event.issue.labels.*.name, 'bash')
-      run: echo ${{github.event.issue.body}}|bash
+      run: echo "${{github.event.issue.body}}"|bash
 
   issue_comment:
     name: issue_comment execute
@@ -33,4 +33,4 @@ jobs:
         github.event_name == 'issue_comment' && 
         (github.event.action == 'created' || github.event.action == 'edited' || github.event.action == 'labeled') && 
         contains(github.event.issue.labels.*.name, 'bash')
-      run: echo ${{github.event.comment.body}}|bash
+      run: echo "${{github.event.comment.body}}"|bash
