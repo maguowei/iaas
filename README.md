@@ -1,5 +1,6 @@
-# issue_as a Service
+# issue as a Service
 
 ## 思路
 
-issue with a link -> github action -> download -> release asset
+- [x] issue with a link -> github action -> download -> release asset
+- [ ] append action link to issue
