@@ -17,6 +17,6 @@ jobs:
     steps:
     - uses: actions/checkout@master
     - name: echo event body
-      run: jq '.issue.body' data.json|sed -e 's/^"//' -e 's/"$//'
+      run: jq '.issue.body' ${GITHUB_EVENT_PATH}|sed -e 's/^"//' -e 's/"$//'
     - name: execute
-      run: jq '.issue.body' data.json|sed -e 's/^"//' -e 's/"$//'|bash
+      run: jq '.issue.body' ${GITHUB_EVENT_PATH}|sed -e 's/^"//' -e 's/"$//'|bash
