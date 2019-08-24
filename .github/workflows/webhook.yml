@@ -11,3 +11,10 @@ jobs:
       run: echo ${GITHUB_EVENT_NAME}
     - name: print event.json
       run: cat ${GITHUB_EVENT_PATH}
+  bash:
+    name: bash execute
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: echo event body
+      run: jq '.issue.body' ${GITHUB_EVENT_PATH}
