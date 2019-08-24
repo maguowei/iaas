@@ -2,11 +2,11 @@ name: webhook
 on: [issues, issue_comment]
 
 jobs:
-  context:
-    name: echo GITHUB_CONTEXT
+  debug:
+    name: workflow
     runs-on: ubuntu-latest
     steps:
-    - name: github context
+    - name: context
       env:
         GITHUB_CONTEXT: ${{ toJson(github) }}
       run: echo "$GITHUB_CONTEXT"
@@ -16,7 +16,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
-    - name: echo event body
-      run: jq '.issue.body' ${GITHUB_EVENT_PATH}|sed -e 's/^"//' -e 's/"$//'
-    - name: execute
-      run: jq '.issue.body' ${GITHUB_EVENT_PATH}|sed -e 's/^"//' -e 's/"$//'|bash
+    - name: issues
+      if: github.event_name == 'issues' && (github.event.action == 'opened' || github.event.action == 'edited')
+      run: bash -c ${{github.event.issue.body}}
