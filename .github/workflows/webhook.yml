@@ -19,7 +19,7 @@ jobs:
     - name: bash
       if: | 
         github.event_name == 'issues' && 
-        (github.event.action == 'opened' || github.event.action == 'edited') && 
+        (github.event.action == 'opened' || github.event.action == 'edited' || github.event.action == 'labeled') && 
         contains(github.event.issue.labels.*.name, 'bash')
       run: bash -c ${{github.event.issue.body}}
 
@@ -31,6 +31,6 @@ jobs:
     - name: bash
       if: |
         github.event_name == 'issue_comment' && 
-        (github.event.action == 'created' || github.event.action == 'edited') && 
+        (github.event.action == 'created' || github.event.action == 'edited' || github.event.action == 'labeled') && 
         contains(github.event.issue.labels.*.name, 'bash')
       run: bash -c ${{github.event.comment.body}}
