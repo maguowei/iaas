@@ -2,15 +2,15 @@ name: webhook
 on: [issues, issue_comment]
 
 jobs:
-  webhook:
-    name: event
+  context:
+    name: echo GITHUB_CONTEXT
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
-    - name: event name
-      run: echo ${GITHUB_EVENT_NAME}
-    - name: print event.json
-      run: cat ${GITHUB_EVENT_PATH}
+    - name: github context
+      env:
+        GITHUB_CONTEXT: ${{ toJson(github) }}
+      run: echo "$GITHUB_CONTEXT"
+
   bash:
     name: bash execute
     runs-on: ubuntu-latest
