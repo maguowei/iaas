@@ -11,6 +11,18 @@ jobs:
         GITHUB_CONTEXT: ${{ toJson(github) }}
       run: echo "$GITHUB_CONTEXT"
 
+  # issue-auto-label:
+  #   name: issues auto label
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: actions/checkout@master
+  #   - name: bash
+  #     if: | 
+  #       github.event_name == 'issues' && 
+  #       (github.event.action == 'opened' || github.event.action == 'edited') && 
+  #       startsWith(github.event.issue.title, 'bash')
+  #     run: echo hello
+
   issue:
     name: issue execute
     runs-on: ubuntu-latest
