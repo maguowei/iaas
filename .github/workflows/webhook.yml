@@ -3,7 +3,7 @@ on: [issues, issue_comment]
 
 jobs:
   debug:
-    name: debug
+    name: _debug
     runs-on: ubuntu-latest
     steps:
     - name: context
@@ -17,7 +17,10 @@ jobs:
     steps:
     - uses: actions/checkout@master
     - name: bash
-      if: github.event_name == 'issues' && (github.event.action == 'opened' || github.event.action == 'edited')
+      if: | 
+        github.event_name == 'issues' && 
+        (github.event.action == 'opened' || github.event.action == 'edited') && 
+        contains(github.event.issue.labels, 'bash')
       run: bash -c ${{github.event.issue.body}}
 
   issue_comment:
@@ -26,5 +29,8 @@ jobs:
     steps:
     - uses: actions/checkout@master
     - name: bash
-      if: github.event_name == 'issue_comment' && (github.event.action == 'created' || github.event.action == 'edited')
+      if: |
+        github.event_name == 'issue_comment' && 
+        (github.event.action == 'created' || github.event.action == 'edited') && 
+        contains(github.event.issue.labels, 'bash')
       run: bash -c ${{github.event.issue.body}}
