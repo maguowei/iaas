@@ -34,3 +34,8 @@ jobs:
         (github.event.action == 'created' || github.event.action == 'edited' || github.event.action == 'labeled') && 
         contains(github.event.issue.labels.*.name, 'bash')
       run: echo "${{github.event.comment.body}}"|bash
+    - name: upload-artifact
+      uses: actions/upload-artifact@master
+      with:
+        name: artifact
+        path: ./
