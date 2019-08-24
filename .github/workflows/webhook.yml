@@ -54,7 +54,6 @@ jobs:
         echo "${{github.event.comment.body}}" >> execute.sh
         sed -i 's/\r//g' execute.sh
         bash -e execute.sh
-
     - name: upload-artifact
       uses: actions/upload-artifact@master
       with:
