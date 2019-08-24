@@ -1,0 +1,13 @@
+name: webhook
+on: [issues, issue_comment]
+
+jobs:
+  webhook:
+    name: event
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: event name
+      run: echo ${GITHUB_EVENT_NAME}
+    - name: print event.json
+      run: cat ${GITHUB_EVENT_PATH}
