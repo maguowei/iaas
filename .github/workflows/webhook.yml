@@ -33,15 +33,17 @@ jobs:
         github.event_name == 'issues' && 
         (github.event.action == 'opened' || github.event.action == 'edited' || github.event.action == 'labeled') && 
         contains(github.event.issue.labels.*.name, 'shell')
+      env:
+        BODY_CONTENT: ${{ github.event.issue.body }}
       run: |
-        cat <<EOF > execute.sh
-        #!/bin/sh -l
-        ${{github.event.issue.body}}
+        cat <<'EOF' > execute.txt
+        ${{ github.event.issue.body }}
         EOF
-        sed -i 's/\r//g' execute.sh
+        sed -i 's/\r//g' execute.txt
+        echo '#!/bin/sh -l' > execute.sh
+        python3 code.py >> execute.sh
         shellcheck execute.sh
         bash -e execute.sh
-
   issue_comment:
     name: issue_comment execute
     runs-on: ubuntu-latest
@@ -52,12 +54,15 @@ jobs:
         github.event_name == 'issue_comment' && 
         (github.event.action == 'created' || github.event.action == 'edited' || github.event.action == 'labeled') && 
         contains(github.event.issue.labels.*.name, 'shell')
+      env:
+        BODY_CONTENT: ${{ github.event.comment.body }}
       run: |
-        cat <<EOF > execute.sh
-        #!/bin/sh -l
-        ${{github.event.comment.body}}
+        cat <<'EOF' > execute.txt
+        ${{ github.event.comment.body }}
         EOF
-        sed -i 's/\r//g' execute.sh
+        sed -i 's/\r//g' execute.txt
+        echo '#!/bin/sh -l' > execute.sh
+        python3 code.py >> execute.sh
         shellcheck execute.sh
         bash -e execute.sh
     - name: upload-artifact
