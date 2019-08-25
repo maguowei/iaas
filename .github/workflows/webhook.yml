@@ -37,6 +37,7 @@ jobs:
         echo '#!/bin/sh -l' > execute.sh
         echo "${{github.event.issue.body}}" >> execute.sh
         sed -i 's/\r//g' execute.sh
+        shellcheck execute.sh
         bash -e execute.sh
 
   issue_comment:
@@ -53,6 +54,7 @@ jobs:
         echo '#!/bin/sh -l' > execute.sh
         echo "${{github.event.comment.body}}" >> execute.sh
         sed -i 's/\r//g' execute.sh
+        shellcheck execute.sh
         bash -e execute.sh
     - name: upload-artifact
       uses: actions/upload-artifact@master
