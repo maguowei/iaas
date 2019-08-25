@@ -1,4 +1,6 @@
-# issue as a Service
+# issue as a service
+
+[![issue as a Service](https://img.shields.io/badge/iaas-issue%20as%20a%20service-green)](https://github.com/maguowei/iaas)
 
 ## 思路
 
