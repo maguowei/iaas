@@ -28,11 +28,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
-    - name: bash
+    - name: shell
       if: | 
         github.event_name == 'issues' && 
         (github.event.action == 'opened' || github.event.action == 'edited' || github.event.action == 'labeled') && 
-        contains(github.event.issue.labels.*.name, 'bash')
+        contains(github.event.issue.labels.*.name, 'shell')
       run: |
         cat <<EOF > execute.sh
         #!/bin/sh -l
@@ -47,11 +47,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
-    - name: bash
+    - name: shell
       if: |
         github.event_name == 'issue_comment' && 
         (github.event.action == 'created' || github.event.action == 'edited' || github.event.action == 'labeled') && 
-        contains(github.event.issue.labels.*.name, 'bash')
+        contains(github.event.issue.labels.*.name, 'shell')
       run: |
         cat <<EOF > execute.sh
         #!/bin/sh -l
