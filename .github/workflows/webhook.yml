@@ -34,8 +34,10 @@ jobs:
         (github.event.action == 'opened' || github.event.action == 'edited' || github.event.action == 'labeled') && 
         contains(github.event.issue.labels.*.name, 'bash')
       run: |
-        echo '#!/bin/sh -l' > execute.sh
-        echo "${{github.event.issue.body}}" >> execute.sh
+        cat <<EOF > execute.sh
+        #!/bin/sh -l
+        ${{github.event.issue.body}}
+        EOF
         sed -i 's/\r//g' execute.sh
         shellcheck execute.sh
         bash -e execute.sh
@@ -51,8 +53,10 @@ jobs:
         (github.event.action == 'created' || github.event.action == 'edited' || github.event.action == 'labeled') && 
         contains(github.event.issue.labels.*.name, 'bash')
       run: |
-        echo '#!/bin/sh -l' > execute.sh
-        echo "${{github.event.comment.body}}" >> execute.sh
+        cat <<EOF > execute.sh
+        #!/bin/sh -l
+        ${{github.event.comment.body}}
+        EOF
         sed -i 's/\r//g' execute.sh
         shellcheck execute.sh
         bash -e execute.sh
