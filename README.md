@@ -1,6 +1,6 @@
 # issue as a service
 
-[![issue as a Service](https://img.shields.io/badge/iaas-issue%20as%20a%20service-green)](https://github.com/maguowei/iaas)
+[![issue as a Service](https://img.shields.io/badge/iaas-issue%20as%20a%20service-brightgreen)](https://github.com/maguowei/iaas)
 
 ## TODO
 
