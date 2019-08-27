@@ -11,17 +11,22 @@ jobs:
         GITHUB_CONTEXT: ${{ toJson(github) }}
       run: echo "$GITHUB_CONTEXT"
 
-  # issue-auto-label:
-  #   name: issues auto label
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   - uses: actions/checkout@master
-  #   - name: bash
-  #     if: | 
-  #       github.event_name == 'issues' && 
-  #       (github.event.action == 'opened' || github.event.action == 'edited') && 
-  #       startsWith(github.event.issue.title, 'bash')
-  #     run: echo hello
+  issue-auto-label:
+    name: issues auto label
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: bash
+      env:
+        API_HEADER_ACCEPT: "Accept: application/vnd.github.symmetra-preview+json"
+        AUTH_HEADER: "Authorization: token ${{ secrets.GITHUB_TOKEN }}"
+      if: |
+        github.event_name == 'issues' && 
+        (github.event.action == 'opened' || github.event.action == 'edited') && 
+        startsWith(github.event.issue.title, 'iaas')
+      run: |
+        ISSUE_ID=${{ github.event.issue.number }}
+        curl -sSL -H "Content-Type: application/json" -H "${API_HEADER_ACCEPT}" -H "${AUTH_HEADER}" -X POST -d "{\"labels\":[\"iaas\"]}" "https://api.github.com/repos/${GITHUB_REPOSITORY}/issues/${ISSUE_ID}/labels"
 
   issue:
     name: issue execute
