@@ -32,7 +32,7 @@ jobs:
       if: | 
         github.event_name == 'issues' && 
         (github.event.action == 'opened' || github.event.action == 'edited' || github.event.action == 'labeled') && 
-        contains(github.event.issue.labels.*.name, 'shell')
+        contains(github.event.issue.labels.*.name, 'iaas')
       env:
         BODY_CONTENT: ${{ github.event.issue.body }}
       run: |
@@ -53,7 +53,7 @@ jobs:
       if: |
         github.event_name == 'issue_comment' && 
         (github.event.action == 'created' || github.event.action == 'edited' || github.event.action == 'labeled') && 
-        contains(github.event.issue.labels.*.name, 'shell')
+        contains(github.event.issue.labels.*.name, 'iaas')
       env:
         BODY_CONTENT: ${{ github.event.comment.body }}
       run: |

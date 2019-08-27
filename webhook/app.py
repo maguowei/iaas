@@ -1,6 +1,6 @@
+import pprint
 from flask import Flask
 from flask import request
-import pprint
 
 app = Flask(__name__)
 
