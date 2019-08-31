@@ -1,4 +1,4 @@
-name: webhook
+name: issue as a service
 on: [issues, issue_comment]
 
 jobs:
