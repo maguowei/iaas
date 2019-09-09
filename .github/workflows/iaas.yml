@@ -1,5 +1,9 @@
 name: issue as a service
-on: [issues, issue_comment]
+on:
+  issues:
+    types: [opened, edited, labeled]
+  issue_comment:
+    types: [created, edited, labeled]
 
 jobs:
   debug:
@@ -15,19 +19,13 @@ jobs:
     name: issues auto label
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
-    - name: bash
-      env:
-        API_HEADER_ACCEPT: "Accept: application/vnd.github.symmetra-preview+json"
-        AUTH_HEADER: "Authorization: token ${{ secrets.GITHUB_TOKEN }}"
+    - uses: actions/github-script@0.2.0
       if: |
-        github.event_name == 'issues' && 
-        (github.event.action == 'opened' || github.event.action == 'edited') && 
-        startsWith(github.event.issue.title, 'iaas')
-      run: |
-        ISSUE_ID=${{ github.event.issue.number }}
-        curl -sSL -H "Content-Type: application/json" -H "${API_HEADER_ACCEPT}" -H "${AUTH_HEADER}" -X POST -d "{\"labels\":[\"iaas\"]}" "https://api.github.com/repos/${GITHUB_REPOSITORY}/issues/${ISSUE_ID}/labels"
-
+        github.event_name == 'issues' && (github.event.action == 'opened' || github.event.action == 'edited') && startsWith(github.event.issue.title, 'iaas')
+      with:
+        github-token: ${{github.token}}
+        script: |
+          github.issues.addLabels({...context.issue, labels: ['iaas']})
   issue:
     name: issue execute
     runs-on: ubuntu-latest
@@ -35,9 +33,7 @@ jobs:
     - uses: actions/checkout@master
     - name: shell
       if: | 
-        github.event_name == 'issues' && 
-        (github.event.action == 'opened' || github.event.action == 'edited' || github.event.action == 'labeled') && 
-        contains(github.event.issue.labels.*.name, 'iaas')
+        github.event_name == 'issues' && contains(github.event.issue.labels.*.name, 'iaas')
       env:
         BODY_CONTENT: ${{ github.event.issue.body }}
       run: |
@@ -56,9 +52,7 @@ jobs:
     - uses: actions/checkout@master
     - name: shell
       if: |
-        github.event_name == 'issue_comment' && 
-        (github.event.action == 'created' || github.event.action == 'edited' || github.event.action == 'labeled') && 
-        contains(github.event.issue.labels.*.name, 'iaas')
+        github.event_name == 'issue_comment' && contains(github.event.issue.labels.*.name, 'iaas')
       env:
         BODY_CONTENT: ${{ github.event.comment.body }}
       run: |
