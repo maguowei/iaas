@@ -6,19 +6,23 @@ on:
     types: [created, edited, labeled]
 
 jobs:
+  permission:
+    name: permission check
+    runs-on: ubuntu-latest
+    if: github.actor == github.repository.owner.login
+    steps:
+    - name: check permission
+      run: echo permission pass
   debug:
     name: _debug
+    needs: permission
     runs-on: ubuntu-latest
+    if: contains(github.event.issue.labels.*.name, 'debug')
     steps:
     - name: context
       env:
         GITHUB_CONTEXT: ${{ toJson(github) }}
       run: echo "$GITHUB_CONTEXT"
-  permission:
-    name: permission check
-    runs-on: ubuntu-latest
-    if: |
-        github.actor == github.repository.owner.login 
   issue-auto-label:
     name: issues auto label
     needs: permission
