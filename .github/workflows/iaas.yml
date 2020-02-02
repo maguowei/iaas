@@ -18,10 +18,10 @@ jobs:
   issue-auto-label:
     name: issues auto label
     runs-on: ubuntu-latest
+    if: |
+        github.event_name == 'issues' && (github.event.action == 'opened' || github.event.action == 'edited') && startsWith(github.event.issue.title, 'iaas')
     steps:
     - uses: actions/github-script@0.2.0
-      if: |
-        github.event_name == 'issues' && (github.event.action == 'opened' || github.event.action == 'edited') && startsWith(github.event.issue.title, 'iaas')
       with:
         github-token: ${{github.token}}
         script: |
@@ -29,11 +29,11 @@ jobs:
   issue:
     name: issue execute
     runs-on: ubuntu-latest
+    if: | 
+        github.event_name == 'issues' && contains(github.event.issue.labels.*.name, 'iaas')
     steps:
     - uses: actions/checkout@master
     - name: shell
-      if: | 
-        github.event_name == 'issues' && contains(github.event.issue.labels.*.name, 'iaas')
       env:
         BODY_CONTENT: ${{ github.event.issue.body }}
       run: |
@@ -48,11 +48,11 @@ jobs:
   issue_comment:
     name: issue_comment execute
     runs-on: ubuntu-latest
+    if: |
+        github.event_name == 'issue_comment' && contains(github.event.issue.labels.*.name, 'iaas')
     steps:
     - uses: actions/checkout@master
     - name: shell
-      if: |
-        github.event_name == 'issue_comment' && contains(github.event.issue.labels.*.name, 'iaas')
       env:
         BODY_CONTENT: ${{ github.event.comment.body }}
       run: |
@@ -69,7 +69,6 @@ jobs:
       with:
         name: artifact
         path: ./
-
     - uses: actions/github-script@0.4.0
       with:
         github-token: ${{github.token}}
