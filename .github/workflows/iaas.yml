@@ -9,9 +9,9 @@ jobs:
   permission:
     name: permission check
     runs-on: ubuntu-latest
+    if: github.actor == github.event.repository.owner.login
     steps:
     - name: check permission
-      if: github.actor == github.event.repository.owner.login
       run: echo permission pass
   debug:
     name: _debug
