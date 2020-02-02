@@ -74,10 +74,9 @@ jobs:
       with:
         github-token: ${{github.token}}
         script: |
-          github.issues.updateComment({
+          github.issues.createComment({
+            issue_number: context.issue.number,
             owner: context.repo.owner,
             repo: context.repo.repo,
-            comment_id: ${{ github.event.comment.id }},
-            body: ${{ github.event.comment.body }} + '\n' + 'https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}'
+            body: '${{ github.event.comment.html_url }} -> https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}'
           })
-
