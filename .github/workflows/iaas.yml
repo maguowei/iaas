@@ -14,16 +14,21 @@ jobs:
       env:
         GITHUB_CONTEXT: ${{ toJson(github) }}
       run: echo "$GITHUB_CONTEXT"
-
+  permission:
+    name: permission check
+    runs-on: ubuntu-latest
+    if: |
+        github.actor == github.repository.owner.login 
   issue-auto-label:
     name: issues auto label
+    needs: permission
     runs-on: ubuntu-latest
     if: |
         github.event_name == 'issues' && (github.event.action == 'opened' || github.event.action == 'edited') && startsWith(github.event.issue.title, 'iaas')
     steps:
     - uses: actions/github-script@0.4.0
       with:
-        github-token: ${{github.token}}
+        github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
           github.issues.addLabels({
             owner: context.repo.owner,
@@ -33,6 +38,7 @@ jobs:
           })
   issue:
     name: issue execute
+    needs: [permission, issue-auto-label]
     runs-on: ubuntu-latest
     if: | 
         github.event_name == 'issues' && contains(github.event.issue.labels.*.name, 'iaas')
@@ -57,7 +63,7 @@ jobs:
         path: ./
     - uses: actions/github-script@0.4.0
       with:
-        github-token: ${{github.token}}
+        github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
           github.issues.createComment({
             issue_number: context.issue.number,
@@ -68,6 +74,7 @@ jobs:
 
   issue_comment:
     name: issue_comment execute
+    needs: permission
     runs-on: ubuntu-latest
     if: |
         github.event_name == 'issue_comment' && contains(github.event.issue.labels.*.name, 'iaas')
@@ -92,7 +99,7 @@ jobs:
         path: ./
     - uses: actions/github-script@0.4.0
       with:
-        github-token: ${{github.token}}
+        github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
           github.issues.createComment({
             issue_number: context.issue.number,
