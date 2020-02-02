@@ -9,9 +9,9 @@ jobs:
   permission:
     name: permission check
     runs-on: ubuntu-latest
-    if: github.actor == github.repository.owner.login
     steps:
     - name: check permission
+      if: github.actor == github.event.repository.owner.login
       run: echo permission pass
   debug:
     name: _debug
@@ -42,7 +42,7 @@ jobs:
           })
   issue:
     name: issue execute
-    needs: [permission, issue-auto-label]
+    needs: permission
     runs-on: ubuntu-latest
     if: | 
         github.event_name == 'issues' && contains(github.event.issue.labels.*.name, 'iaas')
