@@ -21,11 +21,16 @@ jobs:
     if: |
         github.event_name == 'issues' && (github.event.action == 'opened' || github.event.action == 'edited') && startsWith(github.event.issue.title, 'iaas')
     steps:
-    - uses: actions/github-script@0.2.0
+    - uses: actions/github-script@0.4.0
       with:
         github-token: ${{github.token}}
         script: |
-          github.issues.addLabels({...context.issue, labels: ['iaas']})
+          github.issues.addLabels({
+            owner: context.repo.owner,
+            repo: context.repo.owner,
+            issue_number: context.issue.number,
+            labels: ['iaas']
+          })
   issue:
     name: issue execute
     runs-on: ubuntu-latest
@@ -45,6 +50,22 @@ jobs:
         python3 code.py >> execute.sh
         shellcheck execute.sh
         bash -e execute.sh
+    - name: upload-artifact
+      uses: actions/upload-artifact@master
+      with:
+        name: artifact
+        path: ./
+    - uses: actions/github-script@0.4.0
+      with:
+        github-token: ${{github.token}}
+        script: |
+          github.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: 'comment job: ${{ github.event.issue.html_url }} -> [actions/runs](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})'
+          })
+
   issue_comment:
     name: issue_comment execute
     runs-on: ubuntu-latest
