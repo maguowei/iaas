@@ -21,3 +21,4 @@ Example: [iaas/issues/16](https://github.com/maguowei/iaas/issues/16)
 ## TODO
 
 - [ ] Python script support
+- [ ] [upload-release-asset](https://github.com/actions/upload-release-asset) support 文件的永久保存（提供选项）
